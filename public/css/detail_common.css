@@ -1,0 +1,29 @@
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    color: transparent;
+}
+
+h1{
+    color: red;
+}
+button {
+    border: none;
+    border-radius: 8px;
+    background-color: rgb(11, 11, 180);
+    color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.cek{
+    background-color: red;
+    color: blue;
+    height: 100px;
+    width: 200px;
+}
