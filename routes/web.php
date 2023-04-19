@@ -1,7 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BlogController;
-use App\Models\BlogModel;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,8 +22,14 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/profile', [BlogController::class, 'profile']);
+// Route::get('/profile', [BlogController::class, 'profile']);
 
-Route::get('/blog',[BlogController::class, 'blogs']);
+Route::get('/blog', [BlogController::class, 'blogs']);
 
-Route::get('blog/{slug}',  [BlogController::class, 'detailBlog']);
+Route::get('blog/{blog:slug}',  [BlogController::class, 'detailBlog']);
+
+Route::get('category/{category:slug}',  [CategoryController::class, 'detailCategory']);
+
+Route::get('/author', [AuthorController::class, 'author']);
+
+Route::get('author/{author:username}',  [AuthorController::class, 'detailAuthor']);

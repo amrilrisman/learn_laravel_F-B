@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use App\Models\BlogModel;
+use App\Models\Category;
 use App\Models\Profile;
 
 class BlogController extends Controller
@@ -13,15 +14,15 @@ class BlogController extends Controller
     {
         return view('blog', [
             "title" => "blog",
-            "data" => Blog::all(),
+            "data" => Blog::with(['author', 'category'])->latest()->get(),
+            "dataCategory" => Category::with(['blog'])->latest()->get(),
         ]);
     }
 
-    public function detailBlog($id)
+    public function detailBlog(Blog $blog)
     {
         return view('detail_blog', [
-            "title" => Blog::find($id)->title,
-            "data" => Blog::find($id),
+            "data" => $blog,
         ]);
     }
 
@@ -33,4 +34,3 @@ class BlogController extends Controller
         ]);
     }
 }
-

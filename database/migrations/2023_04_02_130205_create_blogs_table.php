@@ -15,11 +15,14 @@ class CreateBlogsTable extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id');
+            $table->foreignId('author_id');
             $table->string('title')->default("data tidak tersedia");
             $table->string('sorth_desc');
+            $table->string('slug');
             $table->text('description');
             $table->timestamp('published-at')->nullable();
-            $table->timestamps(); // untuk waktu di upload 
+            $table->timestamps();
         });
     }
 

@@ -12,8 +12,14 @@ a {
   color: white;
 }
 
+
 a:hover {
   color: transparent;
+}
+
+button{
+  background-color: blue;
+  border: none;
 }
 
 article {
@@ -38,3 +44,4 @@ article:hover {
   animation-fill-mode: forwards;
   color: whitesmoke;
 }
+
