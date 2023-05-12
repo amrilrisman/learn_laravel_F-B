@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
 
 class Blog extends Model
 {
@@ -19,13 +20,44 @@ class Blog extends Model
         'id'
     ];
 
+    public function scopeSearch($data, $search)
+    {
+        $data->when($search ?? false, function ($data, $search) {
+            return $data->where('title', 'like', '%' . $search . '%');
+        });
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
-    public function author()
+
+    public function user()
     {
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }
 

@@ -16,7 +16,7 @@ class BlogFactory extends Factory
         return [
             "title" => $this->faker->sentence(rand(3, 6)),
             "category_id" => rand(1, 3),
-            "author_id" => rand(1, 5),
+            "user_id" => rand(1, 5),
             "sorth_desc" => $this->faker->paragraph(1),
             "slug" => $this->faker->unique()->slug(3),
             "description" => $this->faker->paragraph(rand(15, 24)),

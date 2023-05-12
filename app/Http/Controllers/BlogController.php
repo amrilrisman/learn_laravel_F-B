@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\BlogModel;
 use App\Models\Category;
 use App\Models\Profile;
+use Clockwork\Storage\Search;
 
 class BlogController extends Controller
 {
@@ -14,7 +15,7 @@ class BlogController extends Controller
     {
         return view('blog', [
             "title" => "blog",
-            "data" => Blog::with(['author', 'category'])->latest()->get(),
+            "data" => Blog::with(['user', 'category'])->latest()->search(request('search'))->get(),
             "dataCategory" => Category::with(['blog'])->latest()->get(),
         ]);
     }

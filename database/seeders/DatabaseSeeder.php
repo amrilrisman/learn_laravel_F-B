@@ -24,8 +24,7 @@ class DatabaseSeeder extends Seeder
         Category::create(['name' => "UI-UX", "slug" => "ui-ux",],);
         Category::create(['name' => "Website Developer", "slug" => "website-developer",],);
         Category::create(['name' => "Laravel Framework", "slug" => "laravel-framework",],);
-        Author::factory(5)->create();
         Blog::factory(10)->create();
-        User::factory(1)->create();
+        User::factory(5)->create();
     }
 }
