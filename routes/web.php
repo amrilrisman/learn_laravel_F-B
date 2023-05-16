@@ -60,4 +60,4 @@ Route::get('/dashboard', function () {
 })->name('dashboard')->middleware('auth');
 
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard')->middleware('auth');
-Route::resource('/dashboard/blog', DashboardController::class)->middleware('auth');
+Route::resource('/dashboard/blog', DashboardController::class)->middleware('creator');

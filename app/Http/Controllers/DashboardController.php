@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DashboardMessageSource;
 use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -42,6 +43,7 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->file('img')->store('image'));
 
         $request->validate([
             'title' => 'required|max:255',
@@ -51,21 +53,26 @@ class DashboardController extends Controller
             'description' => 'required',
         ]);
 
+
         if ($request->file('img')->store('image')) {
             $dataValidate['img'] =  $request->file('img')->store('image');
         }
 
-        $dataValidate['sorth_desc'] = Str::limit($request->description, 50);
-        $dataValidate['user_id'] = auth()->user()->id;
-        $dataValidate['category_id'] = $request->category_id;
-        $dataValidate['slug'] = $request->slug;
-        $dataValidate['description'] = $request->description;
-        $dataValidate['title'] = $request->title;
-
-        $request->session()->flash('success', "Sukses menambahkan Data");
-        Blog::create($dataValidate);
-
-        return redirect('/dashboard/blog');
+        if ($request) {
+            $dataValidate['sorth_desc'] = Str::limit($request->description, 50);
+            $dataValidate['user_id'] = auth()->user()->id;
+            $dataValidate['category_id'] = (int)$request->category_id;
+            $dataValidate['slug'] = $request->slug;
+            $dataValidate['description'] = $request->description;
+            $dataValidate['title'] = $request->title;
+            // dd($dataValidate);
+            // $request->session()->flash('success', "Sukses menambahkan Data");
+            // return redirect('/dashboard/blog');
+            Blog::create($dataValidate);
+            return new DashboardMessageSource(["message" => "success create Blog", "status" => 200]);
+        } else {
+            return response("Terjadi Kesalahan", 400);
+        }
     }
 
     /**
@@ -107,10 +114,9 @@ class DashboardController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
-
         $request->validate([
             'title' => 'required|max:255',
-            'img' => 'image|file|max:1200',
+            // 'img' => 'image|file|max:1200',
             'category_id' => 'required',
             'description' => 'required',
         ]);
@@ -119,23 +125,26 @@ class DashboardController extends Controller
             $request['slug'] = 'required|unique:blogs';
         }
 
-        if ($request->file('img')->store('image') != $blog->img) {
-            Storage::delete($blog->img);
-            $dataValidate['img'] =  $request->file('img')->store('image');
+        // if ($request->file('img')->store('image') != $blog->img) {
+        //     Storage::delete($blog->img);
+        //     $dataValidate['img'] =  $request->file('img')->store('image');
+        // }
+
+        if ($request) {
+            $dataValidate['slug'] = $request->slug;
+            $dataValidate['sorth_desc'] = Str::limit($request->description, 50);
+            $dataValidate['user_id'] = auth()->user()->id;
+            $dataValidate['category_id'] = (int)$request->category_id;
+            $dataValidate['description'] = $request->description;
+            $dataValidate['title'] = $request->title;
+            // $request->session()->flash('success', "Sukses ubah Data");
+            Blog::where('id', $blog->id)->update($dataValidate);
+
+            // return redirect('/dashboard/blog');
+            return new DashboardMessageSource(["message" => "success edit Blog", "status" => 200]);
+        } else {
+            return response("Terjadi Kesalahan", 400);
         }
-
-
-        $dataValidate['slug'] = $request->slug;
-        $dataValidate['sorth_desc'] = Str::limit($request->description, 50);
-        $dataValidate['user_id'] = auth()->user()->id;
-        $dataValidate['category_id'] = $request->category_id;
-        $dataValidate['description'] = $request->description;
-        $dataValidate['title'] = $request->title;
-
-        $request->session()->flash('success', "Sukses ubah Data");
-        Blog::where('id', $blog->id)->update($dataValidate);
-
-        return redirect('/dashboard/blog');
     }
 
     /**
@@ -146,9 +155,12 @@ class DashboardController extends Controller
      */
     public function destroy(Blog $blog)
     {
+        // dd("destroy data");
         Storage::delete($blog->img);
         Blog::destroy($blog->id);
 
-        return redirect('/dashboard/blog')->with('success', 'Berhasil Menahapus Blog' . $blog->title);
+        return new DashboardMessageSource(["message" => "success delete blog", "status" => 200]);
+
+        // return redirect('/dashboard/blog')->with('success', 'Berhasil Menahapus Blog' . $blog->title);
     }
 }
